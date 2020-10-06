@@ -7,7 +7,7 @@ struct object_s {
     int val; 
 };
 
-void *object_ctor(const void * _self, va_list *app)
+static void *object_ctor(const void * _self, va_list *app)
 {
     struct object_s * self = _self;
     int val = va_arg(*app, int);
@@ -15,18 +15,18 @@ void *object_ctor(const void * _self, va_list *app)
     return self;
 }
 
-void *object_dtor(void *_self)
+static void *object_dtor(void *_self)
 {
     return _self;
 }
 
-int object_print(const void *_self)
+static int object_print(const void *_self)
 {
     struct object_s * self = _self;
     return printf("%d\n", self->val);
 }
 
-int object_add(const void *_self, const void *_other)
+static int object_add(const void *_self, const void *_other)
 {
     const struct object_s *self = _self;
     const struct object_s *other = _other;

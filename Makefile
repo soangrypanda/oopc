@@ -1,8 +1,10 @@
-SRCMODULES = object.c selectors.c
+SRCMODULES = object.c
 OBJMODULES = $(SRCMODULES:.c=.o)
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -Iobject
+CPATH = ./object
+VPATH = object 
 
-%.o: %.c %.h
+%.o: %.c %.h %.r
 	$(CC) $(CFLAGS) -c $< -o $@
 
 main: main.c $(OBJMODULES)

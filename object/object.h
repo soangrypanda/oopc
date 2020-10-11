@@ -12,6 +12,7 @@ void *new_o(void *const _self, ...);
 void *delete_o(void *const _self);
 void print_o(const void *const _self);
 void *copy_o(const void *const _self);
+
 size_t get_size_o(const void *const _self);
 
 int get_a(const void *const _self);

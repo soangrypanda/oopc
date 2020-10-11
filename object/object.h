@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include "oopcerr.h"
 
 extern void *const object;
 

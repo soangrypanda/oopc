@@ -19,4 +19,8 @@ struct object_class_s {
     int b;
 };
 
+void *object_ctor(void *const _self, va_list *app);
+void *object_dtor(void *const _self);
+
+
 #endif

@@ -1,6 +1,5 @@
 #include "object.h"
 #include "object.r"
-#include "oopcerr.h"
 
 void *new_o(void *const _self, ...)
 {
@@ -10,9 +9,7 @@ void *new_o(void *const _self, ...)
     }
     void *o_ptr = calloc(1, self->size);
     if(o_ptr == 0 && errno == ENOMEM) {
-        exit_error("new_o", ERR_NO );
-        perror("new_o");
-        exit(1);
+        exit_error("new_o", ERR_NO);
     }
     *(struct object_vt_s**)o_ptr = self; 
     if(!self->ctor) {
@@ -28,10 +25,13 @@ void *new_o(void *const _self, ...)
 void *delete_o(void *const _self)
 {
     struct object_class_s *const self = _self;
-    if(!self || !self->vt) {
+    if(!self || !self->vt || self->vt != object) {
         exit_error("delete_o", EWRONGOBJ); 
     }
-    
+    if(self->vt->dtor) {
+        self->vt->dtor(_self);
+    } 
+    free(_self);
     return 0;
 }
 

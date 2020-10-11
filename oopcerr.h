@@ -19,6 +19,7 @@
         else {                                                                   \
              perror(errtxt);                                                     \
         }                                                                        \
+        fflush(0);                                                               \
         exit(1)  
 
 #endif

@@ -10,6 +10,7 @@ void *new_o(void *const _self, ...)
     }
     void *o_ptr = calloc(1, self->size);
     if(o_ptr == 0 && errno == ENOMEM) {
+        exit_error("new_o", ERR_NO );
         perror("new_o");
         exit(1);
     }

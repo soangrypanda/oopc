@@ -7,15 +7,18 @@
 #define EWRONGOBJ -1
 #define EWRONGOBJ_TXT "pointer to invalid object passed"
 
-//void exit_error(char *errtxt, const int error_code);
+#define ERR_NO     0
+#define ERR_NO_TXT    ""
 
 
-#define exit_error(errtxt, err_code)                                  \
-        char *txt = __FILE__ ": " errtxt ": " err_code ## _TXT ".\n"; \
-        if((err_code) < 0) {                                          \
-             fputs(txt, stderr); \
-        }                                                                      \
+#define exit_error(errtxt, err_code)                                             \
+        if((err_code) < 0) {                                                     \
+             char *txt = __FILE__ ":" "%d: " errtxt ": " err_code ## _TXT ".\n"; \
+             fprintf(stderr,txt, __LINE__);                                      \
+        }                                                                        \
+        else {                                                                   \
+             perror(errtxt);                                                     \
+        }                                                                        \
         exit(1)  
-
 
 #endif

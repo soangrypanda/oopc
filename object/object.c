@@ -22,17 +22,18 @@ void *new_o(void *const _self, ...)
     return o_ptr;
 }
 
-void *delete_o(void *const _self)
+void *delete_o(void ** _self)
 {
-    struct object_class_s *const self = _self;
+    struct object_class_s * self = *_self;
     if(!self || !self->vt) {
         exit_error("delete_o", EWRONGOBJ); 
     }
     if(self->vt->dtor) {
         self->vt->dtor(_self);
     } 
-    free(_self);
-    return 0;
+    free(self);
+    *_self = 0;
+    return _self;
 }
 
 void print_o(const void *const _self)
@@ -69,40 +70,31 @@ int compare_o(const void *const _self, const void *const _other)
 
 size_t get_size_o(const void *const _self)
 {
-    const struct object_vt_s *const self = _self;
-    return self->size; 
-}
-
-int get_a(const void *const _self)
-{
-    const struct object_class_s * const self = _self;
-    if (!self || self->vt != object ) {
-        exit_error("get_a", EWRONGOBJ);
+    const struct object_class_s *const self = _self;
+    if (!self || !self->vt)  {
+        exit_error("get_size_o", EWRONGOBJ);
     }
-    return self->vt->a_getter(_self);
+    return self->vt->size; 
 }
 
 void *object_ctor(void *const _self, va_list *app)
 {
-    struct object_class_s *const self = _self;
-    self->a = va_arg(*app, int);
-    self->b = va_arg(*app, int);
     return _self;
 }
 
-void *object_dtor(void *const _self)
+void *object_dtor(void *_self)
 {
     return 0;
 }
 
 void object_print(const void *const _self)
 {
-    fprintf(stdout, "%d \n", get_a((const struct object_class_s * const) _self));
+    fputs("\n", stdout);
 }
 
 void *object_copy(const void *const _self)
 {
-    return new_o(object, get_a(_self), 0);
+    return new_o(object);
 }
 
 int  object_compare(const void *const _self, const void *const _other)
@@ -110,11 +102,6 @@ int  object_compare(const void *const _self, const void *const _other)
     return 0;
 }
 
-int object_a_getter(const void *const _self)
-{
-    const struct object_class_s *const self = _self;
-    return self->a;
-}
 
 
 struct object_vt_s object_vt = {

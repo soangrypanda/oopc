@@ -13,8 +13,12 @@ void *delete_o(void **_self);
 void print_o(const void *const _self);
 void *copy_o(const void *const _self);
 int  compare_o(const void *const _self, const void *const _other);
+void *add_o(const void *const _self, const void *const _other);
+void *sub_o(const void *const _self, const void *const _other);
+void *mult_o(const void *const _self, const void *const _other);
+void *div_o(const void *const _self, const void *const _other);
+
 size_t get_size_o(const void *const _self);
 
-int get_a(const void *const _self);
 
 #endif

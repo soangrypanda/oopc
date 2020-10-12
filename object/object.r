@@ -11,6 +11,10 @@ void *object_dtor(void *const _self);
 void print_o(const void *const _self);
 void *copy_o(const void *const _self);
 int  object_compare(const void *const _self, const void *const _other);
+void *object_add(const void *const _self, const void *const _other);
+void *object_sub(const void *const _self, const void *const _other);
+void *object_mult(const void *const _self, const void *const _other);
+void *object_div(const void *const _self, const void *const _other);
 
 
 #define OBJECT_VT        size_t size;                                              \
@@ -18,14 +22,22 @@ int  object_compare(const void *const _self, const void *const _other);
                          void *(*const dtor)(void *_self);                         \
                          void  (*const print)(const void *const _self);            \
                          void *(*const copy)(const void *const _self);             \
-                         int   (*compare)(const void *const _self, const void *const _other)
+                         int   (*compare)(const void *const _self, const void *const _other); \
+                         void *(*add)(const void *const _self, const void *const _other);     \
+                         void *(*sub)(const void *const _self, const void *const _other);     \
+                         void *(*mult)(const void *const _self, const void *const _other);    \
+                         void *(*div)(const void *const _self, const void *const _other)
 
 #define OBJECT_VT_INIT  .size     = sizeof(struct object_class_s),  \
                         .ctor     = object_ctor,                    \
                         .dtor     = object_dtor,                    \
                         .print    = object_print,                   \
                         .copy     = object_copy,                    \
-                        .compare  = object_compare                 
+                        .compare  = object_compare,                 \
+                        .add      = object_add,                     \
+                        .sub      = object_sub,                     \
+                        .mult     = object_mult,                    \
+                        .div      = object_div                     
 
 struct object_vt_s {
     OBJECT_VT;

@@ -68,6 +68,62 @@ int compare_o(const void *const _self, const void *const _other)
     return self->vt->compare(_self, _other);
 }
 
+void *add_o(const void *const _self, const void *const _other)
+{
+    const struct object_class_s *const self = _self;
+    const struct object_class_s *const other = _other;
+    if (!self  || !self->vt  || !self->vt->add ||
+        !other || !other->vt || !other->vt->add) {
+        exit_error("compare_o", EWRONGOBJ);
+    }
+    if (self->vt != other->vt) {
+        exit_error("compare_o", EDIFFOBJ);
+    }
+    return self->vt->add(_self, _other);
+}
+
+void *sub_o(const void *const _self, const void *const _other)
+{
+    const struct object_class_s *const self = _self;
+    const struct object_class_s *const other = _other;
+    if (!self  || !self->vt  || !self->vt->sub ||
+        !other || !other->vt || !other->vt->sub) {
+        exit_error("compare_o", EWRONGOBJ);
+    }
+    if (self->vt != other->vt) {
+        exit_error("compare_o", EDIFFOBJ);
+    }
+    return self->vt->sub(_self, _other);
+} 
+
+void *mult_o(const void *const _self, const void *const _other)
+{
+    const struct object_class_s *const self = _self;
+    const struct object_class_s *const other = _other;
+    if (!self  || !self->vt  || !self->vt->mult ||
+        !other || !other->vt || !other->vt->mult) {
+        exit_error("compare_o", EWRONGOBJ);
+    }
+    if (self->vt != other->vt) {
+        exit_error("compare_o", EDIFFOBJ);
+    }
+    return self->vt->mult(_self, _other);
+}
+
+void *div_o(const void *const _self, const void *const _other) 
+{
+    const struct object_class_s *const self = _self;
+    const struct object_class_s *const other = _other;
+    if (!self  || !self->vt  || !self->vt->div ||
+        !other || !other->vt || !other->vt->div) {
+        exit_error("compare_o", EWRONGOBJ);
+    }
+    if (self->vt != other->vt) {
+        exit_error("compare_o", EDIFFOBJ);
+    }
+    return self->vt->div(_self, _other);
+}
+
 size_t get_size_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
@@ -76,6 +132,8 @@ size_t get_size_o(const void *const _self)
     }
     return self->vt->size; 
 }
+
+
 
 void *object_ctor(void *const _self, va_list *app)
 {
@@ -102,6 +160,14 @@ int  object_compare(const void *const _self, const void *const _other)
     return 0;
 }
 
+void *object_add(const void *const _self, const void *const _other)
+{ return new_o(object); }
+void *object_sub(const void *const _self, const void *const _other)
+{ return new_o(object); }
+void *object_mult(const void *const _self, const void *const _other)
+{ return new_o(object); }
+void *object_div(const void *const _self, const void *const _other)
+{ return new_o(object); }
 
 
 struct object_vt_s object_vt = {

@@ -9,8 +9,17 @@ int main(void)
     if(a != b)
         fputs("a and b are different!\n", stdout);
     printf("%lu\n",  get_size_o(a));
+
+    void * c = add_o(a,b);
+    delete_o(&c);
+    c = sub_o(a,b);
+    delete_o(&c);
+    c = mult_o(a,b);
+    delete_o(&c);
+    c = div_o(a,b);
+    delete_o(&c);
+
     delete_o(&a);
     delete_o(&b);
-    print_o(a);
     return 0;
 }

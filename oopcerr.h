@@ -7,6 +7,9 @@
 #define EWRONGOBJ -1
 #define EWRONGOBJ_TXT "pointer to invalid object passed"
 
+#define EDIFFOBJ  -2
+#define EDIFFOBJ_TXT  "trying to compare objects of different types"
+
 #define ERR_NO     0
 #define ERR_NO_TXT    ""
 

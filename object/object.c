@@ -53,6 +53,20 @@ void *copy_o(const void *const _self)
     return self->vt->copy(_self);
 }
 
+int compare_o(const void *const _self, const void *const _other)
+{
+    const struct object_class_s *const self = _self;
+    const struct object_class_s *const other = _other;
+    if (!self  || !self->vt  || !self->vt->compare ||
+        !other || !other->vt || !other->vt->compare) {
+        exit_error("compare_o", EWRONGOBJ);
+    }
+    if (self->vt != other->vt) {
+        exit_error("compare_o", EDIFFOBJ);
+    }
+    return self->vt->compare(_self, _other);
+}
+
 size_t get_size_o(const void *const _self)
 {
     const struct object_vt_s *const self = _self;
@@ -91,6 +105,11 @@ void *object_copy(const void *const _self)
     return new_o(object, get_a(_self), 0);
 }
 
+int  object_compare(const void *const _self, const void *const _other)
+{
+    return 0;
+}
+
 int object_a_getter(const void *const _self)
 {
     const struct object_class_s *const self = _self;
@@ -98,15 +117,8 @@ int object_a_getter(const void *const _self)
 }
 
 
-
-
 struct object_vt_s object_vt = {
-    sizeof(struct object_class_s),
-    object_ctor,
-    object_dtor,
-    object_print,
-    object_copy,
-    object_a_getter 
+    OBJECT_VT_INIT
 };
 
 void *const object = &object_vt;

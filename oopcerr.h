@@ -10,6 +10,9 @@
 #define EDIFFOBJ  -2
 #define EDIFFOBJ_TXT  "trying to compare objects of different types"
 
+#define ENOTANOBJ -3
+#define ENOTANOBJ_TXT "operand is not an object of any class"
+
 #define ERR_NO     0
 #define ERR_NO_TXT    ""
 

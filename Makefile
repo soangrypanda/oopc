@@ -1,6 +1,6 @@
 SRCMODULES = object.c
 OBJMODULES = $(SRCMODULES:.c=.o)
-CFLAGS = -g -Wall -I./ -Iobject
+CFLAGS = -g -Wall
 CPATH = ./object
 VPATH = object 
 
@@ -11,4 +11,7 @@ main: main.c $(OBJMODULES)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -f *.o main
+	rm -f *.o main liboopc.a
+
+lib:
+	ar -rcs liboopc.a $(OBJMODULES)

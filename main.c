@@ -3,6 +3,10 @@
 
 int main(void)
 {
+    int i = 13;
+    int *ip = &i;
+    void *d = new_o(ip);
+
     void *a = new_o(object);
     void *b = copy_o(a);
     print_o(a);

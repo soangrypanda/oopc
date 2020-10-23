@@ -7,7 +7,7 @@ void *new_o(void *const _self, ...)
     if(!self) {
         return 0;
     }
-    if(!(self->safecheck) || self->safecheck != passed) {
+    if(!self->safecheck || self->safecheck != passed) {
         exit_error("new_o", ENOTANOBJ); 
     } 
     void *o_ptr = calloc(1, self->size);
@@ -15,6 +15,7 @@ void *new_o(void *const _self, ...)
         exit_error("new_o", ERR_NO);
     }
     *(struct object_vt_s**)o_ptr = self; 
+    ((struct object_class_s *)o_ptr)->safecheck = passed;
     if(!self->ctor) {
         return o_ptr;
     }
@@ -27,8 +28,9 @@ void *new_o(void *const _self, ...)
 
 void *delete_o(void ** _self)
 {
+    if(!_self) { return 0; }
     struct object_class_s * self = *_self;
-    if(!self || !self->vt || self->vt->safecheck != passed) {
+    if(CHECK_IF_OBJ(self)) {
         exit_error("delete_o", ENOTANOBJ); 
     }
     if(self->vt->dtor) {
@@ -42,7 +44,7 @@ void *delete_o(void ** _self)
 void print_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
-    if(!self || !self->vt || self->vt->safecheck != passed || !self->vt->print) {
+    if(CHECK_IF_OBJ(self) || !self->vt->print) {
         exit_error("print_o", EWRONGOBJ);
     } 
     self->vt->print(_self);
@@ -51,7 +53,7 @@ void print_o(const void *const _self)
 void *copy_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
-    if(!self || !self->vt || self->vt->safecheck != passed || !self->vt->copy) {
+    if(CHECK_IF_OBJ(self) || !self->vt->copy) {
         exit_error("copy_o", EWRONGOBJ);
     }
     return self->vt->copy(_self);
@@ -61,8 +63,8 @@ int compare_o(const void *const _self, const void *const _other)
 {
     const struct object_class_s *const self = _self;
     const struct object_class_s *const other = _other;
-    if (!self  || !self->vt  || self->vt->safecheck != passed  || !self->vt->compare ||
-        !other || !other->vt || other->vt->safecheck != passed || !other->vt->compare) {
+    if (CHECK_IF_OBJ(self)  || !self->vt->compare ||
+        CHECK_IF_OBJ(other) || !other->vt->compare) {
         exit_error("compare_o", EWRONGOBJ);
     }
     if (self->vt != other->vt) {
@@ -75,12 +77,12 @@ void *add_o(const void *const _self, const void *const _other)
 {
     const struct object_class_s *const self = _self;
     const struct object_class_s *const other = _other;
-    if (!self  || !self->vt  || !self->vt->add ||
-        !other || !other->vt || !other->vt->add) {
-        exit_error("compare_o", EWRONGOBJ);
+    if (CHECK_IF_OBJ(self)  || !self->vt->add ||
+        CHECK_IF_OBJ(other) || !other->vt->add) {
+        exit_error("add_o", EWRONGOBJ);
     }
     if (self->vt != other->vt) {
-        exit_error("compare_o", EDIFFOBJ);
+        exit_error("add_o", EDIFFOBJ);
     }
     return self->vt->add(_self, _other);
 }
@@ -89,12 +91,12 @@ void *sub_o(const void *const _self, const void *const _other)
 {
     const struct object_class_s *const self = _self;
     const struct object_class_s *const other = _other;
-    if (!self  || !self->vt  || !self->vt->sub ||
-        !other || !other->vt || !other->vt->sub) {
-        exit_error("compare_o", EWRONGOBJ);
+    if (CHECK_IF_OBJ(self)  || !self->vt->sub ||
+        CHECK_IF_OBJ(other) || !other->vt->sub) {
+        exit_error("sub_o", EWRONGOBJ);
     }
     if (self->vt != other->vt) {
-        exit_error("compare_o", EDIFFOBJ);
+        exit_error("sub_o", EDIFFOBJ);
     }
     return self->vt->sub(_self, _other);
 } 
@@ -103,12 +105,12 @@ void *mult_o(const void *const _self, const void *const _other)
 {
     const struct object_class_s *const self = _self;
     const struct object_class_s *const other = _other;
-    if (!self  || !self->vt  || !self->vt->mult ||
-        !other || !other->vt || !other->vt->mult) {
-        exit_error("compare_o", EWRONGOBJ);
+    if (CHECK_IF_OBJ(self)  || !self->vt->mult ||
+        CHECK_IF_OBJ(other) || !other->vt->mult) {
+        exit_error("mult_o", EWRONGOBJ);
     }
     if (self->vt != other->vt) {
-        exit_error("compare_o", EDIFFOBJ);
+        exit_error("mult_o", EDIFFOBJ);
     }
     return self->vt->mult(_self, _other);
 }
@@ -117,12 +119,12 @@ void *div_o(const void *const _self, const void *const _other)
 {
     const struct object_class_s *const self = _self;
     const struct object_class_s *const other = _other;
-    if (!self  || !self->vt  || !self->vt->div ||
-        !other || !other->vt || !other->vt->div) {
-        exit_error("compare_o", EWRONGOBJ);
+    if (CHECK_IF_OBJ(self)  || !self->vt->div ||
+        CHECK_IF_OBJ(other) || !other->vt->div) {
+        exit_error("div_o", EWRONGOBJ);
     }
     if (self->vt != other->vt) {
-        exit_error("compare_o", EDIFFOBJ);
+        exit_error("div_o", EDIFFOBJ);
     }
     return self->vt->div(_self, _other);
 }

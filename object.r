@@ -20,11 +20,10 @@ void *object_div(const void *const _self, const void *const _other);
 struct class_check_s {
     char blank;
 };
-static const struct class_check_s class_check = { 0 };
-static const struct class_check_s *const passed = &class_check;
+struct class_check_s class_check = { 0 };
+struct class_check_s *passed = &class_check;
 
-#define OBJECT_VT        const struct class_check_s *const safecheck;              \
-                         size_t size;                                              \
+#define OBJECT_VT        struct class_check_s *safecheck;                          \
                          void *(*const ctor)(void *const _self, va_list *app);     \
                          void *(*const dtor)(void *_self);                         \
                          void  (*const print)(const void *const _self);            \
@@ -33,10 +32,10 @@ static const struct class_check_s *const passed = &class_check;
                          void *(*add)(const void *const _self, const void *const _other);     \
                          void *(*sub)(const void *const _self, const void *const _other);     \
                          void *(*mult)(const void *const _self, const void *const _other);    \
-                         void *(*div)(const void *const _self, const void *const _other)
+                         void *(*div)(const void *const _self, const void *const _other);     \
+                         size_t size
 
-#define OBJECT_VT_INIT  .safecheck= passed,                         \
-                        .size     = sizeof(struct object_class_s),  \
+#define OBJECT_VT_INIT  .safecheck= &class_check,                   \
                         .ctor     = object_ctor,                    \
                         .dtor     = object_dtor,                    \
                         .print    = object_print,                   \
@@ -45,8 +44,8 @@ static const struct class_check_s *const passed = &class_check;
                         .add      = object_add,                     \
                         .sub      = object_sub,                     \
                         .mult     = object_mult,                    \
-                        .div      = object_div 
-
+                        .div      = object_div,                     \
+                        .size     = sizeof(struct object_class_s)
 
 
 struct object_vt_s {
@@ -55,6 +54,7 @@ struct object_vt_s {
 
 struct object_class_s {
     struct object_vt_s *const vt;
+    struct class_check_s *safecheck; 
 };
 
 

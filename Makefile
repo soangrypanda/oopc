@@ -4,6 +4,8 @@ CFLAGS = -g -Wall
 CPATH = ./object
 VPATH = object 
 
+CC=clang
+
 %.o: %.c %.h %.r
 	$(CC) $(CFLAGS) -c $< -o $@
 

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define CHECK_IF_OBJ(self) !self || !self->vt || \
+                           self->safecheck != passed
 #define EWRONGOBJ -1
 #define EWRONGOBJ_TXT "pointer to invalid object passed"
 

@@ -4,8 +4,9 @@
 int main(void)
 {
     int i = 13;
-    int *ip = &i;
+    void *ip = &i;
     void *d = new_o(ip);
+
 
     void *a = new_o(object);
     void *b = copy_o(a);
@@ -25,5 +26,13 @@ int main(void)
 
     delete_o(&a);
     delete_o(&b);
+
+//    delete_o(&ip);
+//    copy_o(ip);
+//    print_o(ip);
+//    add_o(a, ip);
+//    sub_o(a, ip);
+//    mult_o(a, ip);
+//    div_o(a, ip);    
     return 0;
 }

@@ -4,21 +4,17 @@
 void *new_o(void *const _self, ...)
 {
     struct object_vt_s *const self = _self; 
-    if(!self) {
+    if(!self) 
         return 0;
-    }
-    if(!self->safecheck || self->safecheck != passed) {
+    if(!self->safecheck || self->safecheck != passed) 
         exit_error("new_o", ENOTANOBJ); 
-    } 
     void *o_ptr = calloc(1, self->size);
-    if(o_ptr == 0 && errno == ENOMEM) {
+    if(o_ptr == 0 && errno == ENOMEM) 
         exit_error("new_o", ERR_NO);
-    }
     *(struct object_vt_s**)o_ptr = self; 
     ((struct object_class_s *)o_ptr)->safecheck = passed;
-    if(!self->ctor) {
+    if(!self->ctor) 
         return o_ptr;
-    }
     va_list ap;
     va_start(ap, _self);
     self->ctor(o_ptr, &ap);
@@ -30,12 +26,10 @@ void *delete_o(void ** _self)
 {
     if(!_self) { return 0; }
     struct object_class_s * self = *_self;
-    if(CHECK_IF_OBJ(self)) {
+    if(CHECK_IF_OBJ(self))
         exit_error("delete_o", ENOTANOBJ); 
-    }
-    if(self->vt->dtor) {
+    if(self->vt->dtor)
         self->vt->dtor(_self);
-    } 
     free(self);
     *_self = 0;
     return _self;
@@ -44,18 +38,16 @@ void *delete_o(void ** _self)
 void print_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
-    if(CHECK_IF_OBJ(self) || !self->vt->print) {
+    if(CHECK_IF_OBJ(self) || !self->vt->print) 
         exit_error("print_o", EWRONGOBJ);
-    } 
     self->vt->print(_self);
 }
 
 void *copy_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
-    if(CHECK_IF_OBJ(self) || !self->vt->copy) {
+    if(CHECK_IF_OBJ(self) || !self->vt->copy)
         exit_error("copy_o", EWRONGOBJ);
-    }
     return self->vt->copy(_self);
 }
 
@@ -132,9 +124,8 @@ void *div_o(const void *const _self, const void *const _other)
 size_t get_size_o(const void *const _self)
 {
     const struct object_class_s *const self = _self;
-    if (!self || !self->vt)  {
+    if (CHECK_IF_OBJ(self) || !self->vt->size)
         exit_error("get_size_o", EWRONGOBJ);
-    }
     return self->vt->size; 
 }
 

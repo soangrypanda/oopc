@@ -20,6 +20,8 @@
 
 
 #define exit_error(errtxt, err_code)                                             \
+    do                                                                           \
+    {                                                                            \
         if((err_code) < 0) {                                                     \
              char *txt = __FILE__ ":" "%d: " errtxt ": " err_code ## _TXT ".\n"; \
              fprintf(stderr,txt, __LINE__);                                      \
@@ -28,6 +30,7 @@
              perror(errtxt);                                                     \
         }                                                                        \
         fflush(0);                                                               \
-        exit(1)  
+        exit(1);                                                                 \
+    } while(0)
 
 #endif

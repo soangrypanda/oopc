@@ -1,4 +1,4 @@
-SRCMODULES = object.c
+SRCMODULES = object.c typecheck.c
 OBJMODULES = $(SRCMODULES:.c=.o)
 CFLAGS = -g -Wall
 CPATH = ./object

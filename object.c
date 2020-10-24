@@ -1,5 +1,6 @@
 #include "object.h"
 #include "object.r"
+#include "typecheck.h"
 
 void *new_o(void *const _self, ...)
 {

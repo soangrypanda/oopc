@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdarg.h>
-
+#include "typecheck.h"
 
 
 void *object_ctor(void *const _self, va_list *app);
@@ -16,12 +16,6 @@ void *object_sub(const void *const _self, const void *const _other);
 void *object_mult(const void *const _self, const void *const _other);
 void *object_div(const void *const _self, const void *const _other);
 
-
-struct class_check_s {
-    char blank;
-};
-struct class_check_s class_check = { 0 };
-struct class_check_s *passed = &class_check;
 
 #define OBJECT_VT        struct class_check_s *safecheck;                          \
                          void *(*const ctor)(void *const _self, va_list *app);     \

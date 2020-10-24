@@ -41,6 +41,7 @@ void *object_div(const void *const _self, const void *const _other);
                         .div      = object_div,                     \
                         .size     = sizeof(struct object_class_s)
 
+#define OBJECT_DATA     struct class_check_s *safecheck
 
 struct object_vt_s {
     OBJECT_VT;
@@ -48,7 +49,7 @@ struct object_vt_s {
 
 struct object_class_s {
     struct object_vt_s *const vt;
-    struct class_check_s *safecheck; 
+    OBJECT_DATA;
 };
 
 
